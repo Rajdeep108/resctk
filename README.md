@@ -1,4 +1,4 @@
-# Resume Screening Toolkit README
+# Resume Screening Toolkit
 
 ## Overview
 A comprehensive toolkit for resume analysis. It allows you to:
