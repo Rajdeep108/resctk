@@ -36,7 +36,6 @@ from resctk.resume import extract_resume
 resume_text = extract_resume("resume.pdf")
 print(resume_text)
 ```
-```
 **Example Output:**
 ```
 John Doe
