@@ -30,13 +30,13 @@ print(f"Resume Score: {score}")
 ```
 🔹 Now you're ready to use all the features! Read on for details.  
 
-## Getting Started - DETAILED
+## 📌 Getting Started - DETAILED
 You can install the library using pip:
 ```sh
 pip install resctk
 ```
 
-## 📌 Use Cases
+## Use Cases
 **Who is this for?**
 ✔️ **Recruiters** → Automate resume screening  
 ✔️ **Hiring Managers** → Compare multiple applicants  
