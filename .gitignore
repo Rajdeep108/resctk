@@ -1,0 +1,17 @@
+# Ignore Python cache & compiled files (only locally)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore build artifacts
+build/
+dist/
+*.egg-info/
+resctk.egg-info/
+# Do NOT ignore model caches, users need them!
+# (Let users cache downloads from nltk, spacy, etc.)
