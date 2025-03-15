@@ -2,21 +2,46 @@ import os
 from .resume import *
 
 def score_resume(resume,job_descr:str,after_decimal=4):
+    """
+    Computes a weighted resume score based on various semantic, keyword, and experience-related criteria.
+
+    Args:
+        resume: The file or text containing the resume content.
+        job_descr (str): The job description text to compare against.
+        after_decimal (int, optional): Number of decimal places to round the final score. Defaults to 4.
+
+    Returns:
+        float: A score (out of 5) representing the overall match between the resume and the job description.
+    
+    Scoring Rules:
+        1. Overall semantic similarity between the resume and job description.
+        2. Skill relevance based on semantic similarity and extracted keywords.
+        3. Experience relevance based on semantic similarity, extracted keywords, and experience duration comparison.
+        4. Education match based on the highest degree obtained.
+        5. Keyword match score for skills and experience.
+        6. Skill relevance to project descriptions (if available).
+        7. Action verb usage frequency to assess impactfulness of descriptions.
+    
+    Notes:
+        - Uses NLP-based methods (TF-IDF, Named Entity Recognition, and Semantic Similarity).
+        - Merges repeated sections before analysis.
+        - Calculates weighted scores for each rule and returns a final score out of 5.
+    """
     document = extract_resume(resume)
     parsed_doc = parse_resume(document)
     merged_doc = merge_repetitions(parsed_doc)
 
-    overall_sem_score = semantic_search(resume=document,job_description=job_descr) if document else 0 #---------rule 1
+    overall_sem_score = semantic_similarity(resume=document,job_description=job_descr) if document else 0 #---------rule 1
     
     skill_jd_score, skills_keywords = 0, []
     if merged_doc.get("skills"):
-        skill_jd_score = semantic_search(merged_doc["skills"],job_descr) #-------------------rule 2
+        skill_jd_score = semantic_similarity(merged_doc["skills"],job_descr) #-------------------rule 2
         skills_keywords = get_keywords(text=merged_doc["skills"],tfidf=15,ner=15)
     
     exp_jd_score, exp_keywords, res_experience = 0, [], error_messages.no_data["no_data"]
     for section in ["experience", "employment", "work experience"]: 
         if merged_doc.get(section):
-            exp_jd_score = semantic_search(merged_doc[section], job_descr) #---------------------------rule 2.2
+            exp_jd_score = semantic_similarity(merged_doc[section], job_descr) #---------------------------rule 2.2
             res_experience = get_experience_years(merged_doc[section])
             exp_keywords = get_keywords(text=merged_doc[section], tfidf=15, ner=15)
             break
@@ -39,7 +64,7 @@ def score_resume(resume,job_descr:str,after_decimal=4):
     if merged_doc.get("skills"):
         for project_section in ["projects", "project"]:
             if merged_doc.get(project_section):
-                skill_projct_score = semantic_search(merged_doc["skills"], merged_doc[project_section]) #---------------------------------rule 6
+                skill_projct_score = semantic_similarity(merged_doc["skills"], merged_doc[project_section]) #---------------------------------rule 6
                 break 
 
     verb_counts = count_action_verbs(document)
@@ -61,6 +86,22 @@ def score_resume(resume,job_descr:str,after_decimal=4):
     return round(weighted_scores*5,after_decimal) # score out of 5 
 
 def screen_all(folder_path: str, job_descr: str, rename_files=False):
+    """
+    Screens and scores all resumes in a given folder against a job description.
+
+    Args:
+        folder_path (str): The path to the folder containing resumes (PDF files).
+        job_descr (str): The job description text to compare against.
+        rename_files (bool, optional): If True, renames files by prefixing them with their score. Defaults to False.
+
+    Returns:
+        list: A sorted list of tuples [(filename, score), ...] in descending order of score.
+
+    Notes:
+        - Extracts resumes from PDFs and evaluates them using `score_resume`.
+        - Sorts resumes based on their match score (highest first).
+        - If `rename_files` is enabled, renames files with their respective scores.
+    """
     resume_scores = {}
     for filename in os.listdir(folder_path):
         if filename.lower().endswith((".pdf")):
