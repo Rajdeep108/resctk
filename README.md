@@ -8,11 +8,40 @@ A comprehensive toolkit for resume analysis. It allows you to:
 - Automate resume screening for better hiring decisions
 - Create custom workflows and pipelines using modular functions to build your own resume screener and sorter
 
-## Getting Started
+## 🚀 Quick Start Guide
+1. **Install the package**  
+```sh
+pip install resctk
+```
+2. **Extract Resume Text**
+```python
+from resctk.resume import extract_resume
+text = extract_resume("resume.pdf")
+print(text)
+```
+3. **Parse and Score the Resume**
+```python
+from resctk.resume import parse_resume
+from resctk.score import score_resume
+
+parsed = parse_resume(text)
+score = score_resume(parsed, "Python Developer job description")
+print(f"Resume Score: {score}")
+```
+🔹 Now you're ready to use all the features! Read on for details.  
+
+## Getting Started - DETAILED
 You can install the library using pip:
 ```sh
 pip install resctk
 ```
+
+## 📌 Use Cases
+**Who is this for?**
+✔️ **Recruiters** → Automate resume screening  
+✔️ **Hiring Managers** → Compare multiple applicants  
+✔️ **Job Seekers** → Optimize resumes for better scoring  
+✔️ **HR Tech Developers** → Build AI-based hiring solutions  
 
 ### Understanding the Structure
 The `resctk` library consists of two main modules:
@@ -70,17 +99,16 @@ print(parsed_resume)
 }
 ```
 
-### 3. **Extracting Key Resume Information**
-
-#### Functions:
-- `get_name(resume_text)`: Extracts the name.
-- `get_phone_number(resume)`: Extracts phone number(s).
-- `get_email(resume)`: Extracts email address(es).
-- `get_experience(resume)`: Extracts experience section.
-- `get_skills(resume)`: Extracts skills section.
-- `get_education(resume)`: Extracts education section.
-- `get_projects(resume)`: Extracts projects section.
-- `get_custom_section(resume, section_name, variations)`: Extracts custom-defined sections.
+### 3️⃣ Extracting Key Resume Information
+| Function | Purpose |
+|----------|---------|
+| `get_name(resume_text)` | Extracts the applicant's name |
+| `get_phone_number(resume)` | Finds phone numbers in the resume |
+| `get_email(resume)` | Extracts email addresses |
+| `get_experience(resume)` | Retrieves the experience section |
+| `get_skills(resume)` | Extracts listed skills |
+| `get_education(resume)` | Finds educational qualifications |
+| `get_projects(resume)` | Retrieves project details |
 
 **Usage Example:**
 ```python
