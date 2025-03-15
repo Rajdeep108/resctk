@@ -57,7 +57,7 @@ All processing functions are inside `resctk.resume`, while `resctk.score` curren
 ### 1. **Extracting Resume Text**
 
 #### Function: `extract_resume(resume)`
-- **Input**: A PDF file containing a resume.
+- **Input**: The PDF filepath containing the resume elements. (Currently only supports PDF)
 - **Output**: Extracted text as a string.
 - **Usage**:
 ```python
@@ -82,6 +82,7 @@ Experience: 5 years
 - **Features**:
   - Parses the resume based on predefined sections.
   - Can use regex-based parsing (`regex_parse=True`).
+  - If regex_parse is set False it will use advanced NLP techniques to parse  the resume.
   - Supports merging repeated sections (`merge_repetition=True`).
   - Allows adding extra sections beyond the default ones.
 - **Usage**:
@@ -265,7 +266,7 @@ Resume Score: 3.81
 ### 10. **Screening Multiple Resumes**
 ```python
 from resctk.score import screen_all
-ranked_resumes = screen_all("/path/to/folder_with_resumes", job_description_text)
+ranked_resumes = screen_all("/path/to/folder_containing_resumes", job_description_text)
 print(ranked_resumes)
 ```
 **Example Output:**
