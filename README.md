@@ -61,6 +61,14 @@ from resctk.resume import parse_resume
 parsed_resume = parse_resume(resume_text, extra_sections=["volunteer work"], regex_parse=False, merge_repetition=True)
 print(parsed_resume)
 ```
+**Example Output:**
+```
+{
+  "name": "John Doe",
+  "experience": "5 years at XYZ Corp",
+  "skills": ["Python", "Machine Learning"]
+}
+```
 
 ### 3. **Extracting Key Resume Information**
 
@@ -82,6 +90,10 @@ phone = get_phone_number(resume_text)
 skills = get_skills(resume_text)
 print(f"Name: {name}, Phone: {phone}, Skills: {skills}")
 ```
+**Example Output:**
+```
+Name: John Doe, Phone: +1-234-567-890, Skills: ['Python', 'Machine Learning']
+```
 
 ### 4. **Experience & Education Processing**
 
@@ -93,6 +105,10 @@ print(f"Name: {name}, Phone: {phone}, Skills: {skills}")
 from resctk.resume import get_experience_years
 experience_duration = get_experience_years(parsed_resume['experience'])
 print(experience_duration)
+```
+**Example Output:**
+```
+5 year(s) 0 month(s)
 ```
 
 #### Function: `get_company_names(info_section, spacy_model="en_core_web_md")`
@@ -126,6 +142,10 @@ from resctk.resume import get_keywords
 keywords = get_keywords(resume_text)
 print(keywords)
 ```
+**Example Output:**
+```
+["Python", "AI", "Software Engineering"]
+```
 
 #### Function: `match_keywords(list1, list2, ignore_case=True)`
 - **Input**: Two keyword lists.
@@ -135,6 +155,10 @@ print(keywords)
 from resctk.resume import match_keywords
 matching_keywords = match_keywords(keywords, job_description_keywords)
 print(matching_keywords)
+```
+**Example Output:**
+```
+['Python', 'finance']
 ```
 
 ### 6. **Semantic Similarity Matching**
@@ -148,6 +172,10 @@ from resctk.resume import semantic_similarity
 similarity_score = semantic_similarity(resume_text, job_description_text)
 print(similarity_score)
 ```
+**Example Output:**
+```
+0.822345712
+```
 
 ### 7. **Action Verb Analysis**
 
@@ -159,6 +187,10 @@ print(similarity_score)
 from resctk.resume import count_action_verbs
 action_verbs = count_action_verbs(resume_text)
 print(action_verbs)
+```
+**Example Output:**
+```
+{"Developed":1,"Created":3}
 ```
 
 ### 8. **Experience Comparison**
@@ -197,6 +229,62 @@ from resctk.score import score_resume
 score = score_resume(parsed_resume, job_description_text)
 print(f"Resume Score: {score}")
 ```
+**Example Output:**
+```
+Resume Score: 3.81
+```
+
+### 10. **Screening Multiple Resumes**
+```python
+from resctk.score import screen_all
+ranked_resumes = screen_all("/path/to/folder_with_resumes", job_description_text)
+print(ranked_resumes)
+```
+**Example Output:**
+```
+[
+  ('resume_sample.pdf', 2.693), ('Student Athlete Resume.pdf', 2.2015), ('Bad-Resume.pdf', 1.901), ('functionalsample.pdf', 1.497)
+]
+```
+
+## Creating a Custom Resume Screener
+Users can customize the screening process by defining their own scoring rules, keyword matches, or evaluation criteria. By combining functions from `resctk.resume` and `resctk.score`, they can build procedural workflows tailored to specific hiring needs.
+
+### Example: Custom Resume Screener
+```python
+from resctk.resume import extract_resume, parse_resume, get_keywords, semantic_similarity, match_keywords
+from resctk.score import score_resume
+import os
+
+def custom_screener(folder_path, job_description):
+    results = []
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".pdf"):
+            filepath = os.path.join(folder_path, filename)
+            text = extract_resume(filepath)
+            parsed = parse_resume(text)
+            similarity_score = semantic_similarity(parsed, job_description)
+            score_2 = semantic_similarity(text, job_description)
+            keywords = get_keywords(text)
+            keyscore = match_keywords(keywords, get_keywords(job_description))
+            final_score = keyscore + similarity_score + score_2
+            results.append({"name": parsed.get("name", filename), "score": final_score, "keywords": keywords})
+    return results
+
+# Example usage
+job_desc = "Looking for a Python developer with experience in AI."
+results = custom_screener("/path/to/resumes", job_desc)
+print(results)
+```
+**Example Output:**
+```
+[
+  {'name': 'John Doe', 'score': 3.9, 'keywords': ['Python', 'AI', 'Software Engineering']},
+  {'name': 'Jane Smith', 'score': 4.1, 'keywords': ['Machine Learning', 'Deep Learning', 'Python']}
+]
+```
+
+This modular approach allows users to tweak and extend the scoring system beyond the built-in functions for more accurate and specific hiring decisions.
 
 ## Conclusion
-This system provides an automated way to analyze resumes against job descriptions, extracting key information and scoring based on predefined criteria.
+This system provides an automated way to analyze resumes against job descriptions, extracting key information and scoring based on predefined criteria and customized.
