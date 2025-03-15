@@ -99,7 +99,7 @@ print(parsed_resume)
 }
 ```
 
-### 3️⃣ Extracting Key Resume Information
+### 3. **Extracting Key Resume Information**
 | Function | Purpose |
 |----------|---------|
 | `get_name(resume_text)` | Extracts the applicant's name |
