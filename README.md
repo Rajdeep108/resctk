@@ -8,6 +8,21 @@ A comprehensive toolkit for resume analysis. It allows you to:
 - Automate resume screening for better hiring decisions
 - Create custom workflows and pipelines using modular functions to build your own resume screener and sorter
 
+## Getting Started
+You can install the library using pip:
+```sh
+pip install resctk
+```
+
+### Understanding the Structure
+The `resctk` library consists of two main modules:
+1. **resume**: Contains all the necessary functions for processing resumes.
+2. **score**: Contains functions to evaluate resumes.
+
+All processing functions are inside `resctk.resume`, while `resctk.score` currently has two key functions:
+- `score_resume`: Uses predefined criteria to assess a resume and provides a score out of 5.
+- `screen_all`: Processes a folder containing multiple resumes, sorts them, and returns a list of evaluations.
+
 ## Functions
 
 ### 1. **Extracting Resume Text**
