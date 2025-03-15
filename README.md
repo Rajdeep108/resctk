@@ -36,6 +36,15 @@ from resctk.resume import extract_resume
 resume_text = extract_resume("resume.pdf")
 print(resume_text)
 ```
+```
+**Example Output:**
+```
+John Doe
+Software Engineer
+Experience: 5 years
+...
+```
+
 
 ### 2. **Parsing the Resume**
 
