@@ -1,6 +1,6 @@
 import nltk
 import spacy
-import subprocess
+from spacy.cli import download
 from sentence_transformers import SentenceTransformer
 
 def ensure_nltk_spacy_resources():
@@ -26,7 +26,7 @@ def ensure_nltk_spacy_resources():
         try:
             spacy.load(model)
         except OSError:
-            subprocess.run(["python", "-m", "spacy", "download", model])
+            download(model) #spacy cli download
 
 def ensure_sentence_transformer(model_name="paraphrase-MiniLM-L3-v2"):
     try:
