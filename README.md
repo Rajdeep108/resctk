@@ -1,7 +1,7 @@
 # Resume Screening Toolkit
 
 ## Overview
-A comprehensive toolkit for resume analysis. It allows you to:
+A comprehensive AI-powered toolkit for resume analysis 🤖. It allows you to:
 - Parse and extract key details from resumes
 - Score individual resumes based on job descriptions
 - Score and rank multiple resumes for screening and sorting
@@ -13,20 +13,29 @@ A comprehensive toolkit for resume analysis. It allows you to:
 ```sh
 pip install resctk
 ```
-2. **Extract Resume Text**
+2. **Extract Resume (optional)**
 ```python
 from resctk.resume import extract_resume
 text = extract_resume("resume.pdf")
 print(text)
 ```
-3. **Parse and Score the Resume**
+3. **Parse the extracted Resume Text (optional)**
 ```python
 from resctk.resume import parse_resume
-from resctk.score import score_resume
-
 parsed = parse_resume(text)
-score = score_resume(parsed, "Python Developer job description")
+print(f"Parsed Resume Dictionary: {parsed}")
+```
+4. **Score a single Resume**
+```python
+from resctk.score import score_resume
+score = score_resume("path/to/resume.pdf", "Python Developer job description...")
 print(f"Resume Score: {score}")
+```
+5. **Score entire Folder of Resumes (Bulk Scoring)**
+```python
+from resctk.score import screen_all
+arranged_list = screen_all("folderpath/containing/resumes/", "Web Developer job description....", rename_files=False)
+print(f"Sorted Resume list: {arranged_list}")
 ```
 🔹 Now you're ready to use all the features! Read on for details.  
 
@@ -206,6 +215,20 @@ print(similarity_score)
 0.822345712
 ```
 
+#### 📊 Understanding Resume Scores  
+
+To understand how the resume screening and scoring work, you can print the package documentation:  
+
+```python
+import resctk.info
+print(resctk.info.__doc__)
+```
+**Output:**
+```
+- Score Resume: the score is calculated out of 5. Any resume with a score equal to or above 2.4 is considered a good match for the job.
+- Semantic Similarity: the score is in the range 0 to 1; 0 = completely opposite meaning, 0.5 = no similarity, 1 = exactly the same.
+```
+
 ### 7. **Action Verb Analysis**
 
 #### Function: `count_action_verbs(text)`
@@ -255,22 +278,47 @@ print(experience_match)
 - **Usage:**
 ```python
 from resctk.score import score_resume
-score = score_resume(parsed_resume, job_description_text)
+score = score_resume("filepath/resume.pdf", "Python Developer job description...", after_decimal=4,status_message=True)
 print(f"Resume Score: {score}")
 ```
+### 🔍 **Arguments Explained:**
+| **Argument**      | **Type**  | **Default**    | **Description** |
+|------------------|----------|---------------|----------------|
+| `resume`        | `str`    | **Required**   | The **file path** of the resume (PDF or text). |
+| `job_descr`     | `str`    | **Required**   | The **job description text** to compare the resume against. |
+| `after_decimal` | `int`    | `4`            | *(Optional)* Number of decimal places to round the final score. |
+| `status_message` | `bool`   | `True`         | *(Optional)* If `True`, displays **"Scoring in progress!..... ⏳"** while scoring. |
+---
+
 **Example Output:**
 ```
+Scoring in progress!..... ⏳
+
 Resume Score: 3.81
 ```
 
 ### 10. **Screening Multiple Resumes**
 ```python
 from resctk.score import screen_all
-ranked_resumes = screen_all("/path/to/folder_containing_resumes", job_description_text)
+ranked_resumes = screen_all(folder_path = "/path/to/folder_containing_resumes", job_descr = "job_description_text", rename_files= False, status_message=True)
 print(ranked_resumes)
 ```
+### 🔍 **Arguments Explained:**
+| **Argument**      | **Type**  | **Default**  | **Description** |
+|------------------|----------|--------------|----------------|
+| `folder_path`   | `str`    | **Required** | The **path to the folder** containing resumes (PDF files). |
+| `job_descr`     | `str`    | **Required** | The **job description text** to compare against. |
+| `rename_files`  | `bool`   | `False`      | *(Optional)* If `True`, renames files directly in the parent folder by prefixing them with their score. |
+| `status_message` | `bool`   | `False`      | *(Optional)* If `True`, displays **"🔍 Screening all resumes... Please wait, this may take a few minutes!..."** while screening. |
+---
+
 **Example Output:**
 ```
+🔍 Screening all resumes... Please wait, this may take a few minutes!
+☕ Grab a coffee in the meantime! ☕
+
+
+✅ Screening completed! Here are the results:
 [
   ('resume_sample.pdf', 2.693), ('Student Athlete Resume.pdf', 2.2015), ('Bad-Resume.pdf', 1.901), ('functionalsample.pdf', 1.497)
 ]

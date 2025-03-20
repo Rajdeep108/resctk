@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "resctk"
-version = "0.1.2"
-description = "A powerful toolkit for parsing, extracting, scoring, and screening resumes, with customizable pipelines."
+version = "0.1.3"
+description = "A powerful AI-driven toolkit for parsing, extracting, scoring, and screening resumes, with customizable pipelines."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Rajdeep Roshan Sahu"}]
