@@ -8,6 +8,10 @@ A comprehensive AI-powered toolkit for resume analysis 🤖. It allows you to:
 - Automate resume screening for better hiring decisions
 - Create custom workflows and pipelines using modular functions to build your own resume screener and sorter
 
+### 📢 What's New in This Version?  
+✅ **Now supports `.docx` resumes along with `.pdf`** – Easily extract, parse, and score resumes in both formats!  
+✅ **Improved bulk resume screening (`screen_all`)** – Automatically processes and ranks resumes from a folder, whether they are PDFs or Word documents.
+
 ## 🚀 Quick Start Guide
 1. **Install the package**  
 ```sh
@@ -66,7 +70,7 @@ All processing functions are inside `resctk.resume`, while `resctk.score` curren
 ### 1. **Extracting Resume Text**
 
 #### Function: `extract_resume(resume)`
-- **Input**: The PDF filepath containing the resume elements. (Currently only supports PDF)
+- **Input**: The PDF/DOCX filepath containing the resume elements. (supports PDF and DOCX)
 - **Output**: Extracted text as a string.
 - **Usage**:
 ```python
@@ -284,7 +288,7 @@ print(f"Resume Score: {score}")
 ### 🔍 **Arguments Explained:**
 | **Argument**      | **Type**  | **Default**    | **Description** |
 |------------------|----------|---------------|----------------|
-| `resume`        | `str`    | **Required**   | The **file path** of the resume (PDF or text). |
+| `resume`        | `str`    | **Required**   | The **file path** of the resume (PDF or DOCX). |
 | `job_descr`     | `str`    | **Required**   | The **job description text** to compare the resume against. |
 | `after_decimal` | `int`    | `4`            | *(Optional)* Number of decimal places to round the final score. |
 | `status_message` | `bool`   | `True`         | *(Optional)* If `True`, displays **"Scoring in progress!..... ⏳"** while scoring. |
@@ -306,7 +310,7 @@ print(ranked_resumes)
 ### 🔍 **Arguments Explained:**
 | **Argument**      | **Type**  | **Default**  | **Description** |
 |------------------|----------|--------------|----------------|
-| `folder_path`   | `str`    | **Required** | The **path to the folder** containing resumes (PDF files). |
+| `folder_path`   | `str`    | **Required** | The **path to the folder** containing resumes (PDF/DOCX files). |
 | `job_descr`     | `str`    | **Required** | The **job description text** to compare against. |
 | `rename_files`  | `bool`   | `False`      | *(Optional)* If `True`, renames files directly in the parent folder by prefixing them with their score. |
 | `status_message` | `bool`   | `False`      | *(Optional)* If `True`, displays **"🔍 Screening all resumes... Please wait, this may take a few minutes!..."** while screening. |

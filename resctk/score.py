@@ -6,7 +6,7 @@ def score_resume(resume,job_descr:str,after_decimal=4,status_message=True):
     Computes a weighted resume score based on various semantic, keyword, and experience-related criteria.
 
     Args:
-        resume: The file or text containing the resume content.
+        resume: The file or text containing the resume content (PDF or DOCX).
         job_descr (str): The job description text to compare against.
         after_decimal (int, optional): Number of decimal places to round the final score. Defaults to 4.
         status_message (bool, optional): Display the status message in terminal when the function is called. 
@@ -92,7 +92,7 @@ def screen_all(folder_path: str, job_descr: str, rename_files=False, status_mess
     Screens and scores all resumes in a given folder against a job description.
 
     Args:
-        folder_path (str): The path to the folder containing resumes (PDF files).
+        folder_path (str): The path to the folder containing resumes (PDF or DOCX files).
         job_descr (str): The job description text to compare against.
         rename_files (bool, optional): If True, renames files in parent folder by prefixing them with their score. Defaults to False.
         status_message (bool, optional): Display the status message in terminal when the function is called.
@@ -101,7 +101,7 @@ def screen_all(folder_path: str, job_descr: str, rename_files=False, status_mess
         list: A sorted list of tuples [(filename, score), ...] in descending order of score.
 
     Notes:
-        - Extracts resumes from PDFs and evaluates them using `score_resume`.
+        - Extracts resumes from PDFs/DOCXs and evaluates them using `score_resume`.
         - Sorts resumes based on their match score (highest first).
         - If `rename_files` is enabled, renames files with their respective scores.
     """
@@ -110,7 +110,7 @@ def screen_all(folder_path: str, job_descr: str, rename_files=False, status_mess
         print("☕ Grab a coffee in the meantime! ☕\n")
     resume_scores = {}
     for filename in os.listdir(folder_path):
-        if filename.lower().endswith((".pdf")):
+        if filename.lower().endswith((".pdf", ".docx")):
                 file_path = os.path.join(folder_path, filename)
                 score = score_resume(file_path, job_descr,status_message=False)  # Assuming score_resume works with file paths
                 resume_scores[filename] = score

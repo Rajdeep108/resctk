@@ -1,5 +1,6 @@
+import os
+import docx
 import pdfplumber
-import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag
@@ -9,7 +10,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 import re
 from datetime import datetime
-from copy import deepcopy
 #custom import
 from . import error_messages
 
@@ -455,37 +455,47 @@ def match_keywords(list1: list[str], list2: list[str], ignore_case: bool = True)
 
     return list(list1 & list2)
 
-def extract_resume(resume)->str:
+def extract_resume(resume_path)->str:
     """
-    Extracts text from a PDF resume.
+    Extracts text from a resume file (PDF or DOCX).
 
-    This function reads a PDF file and extracts text from all its pages, 
+    This function reads a PDF/DOCX file and extracts text from all its pages, 
     ensuring proper handling of multi-page documents.
 
     Parameters:
     ----------
     resume_path (str): 
-        Path to the resume PDF file.
+        Path to the resume file (PDF or DOCX).
 
     Returns:
     -------
     str:
-        Extracted text content from the PDF.
+        Extracted text content from the resume.
 
     Example:
     --------
     >>> extract_resume("resume.pdf")
     'John Doe Software Engineer Experience at XYZ...'
     """
-    doc = pdfplumber.open(resume)
-    text = doc.pages
-    corpus =""
-    for i in text:
-        page_text = i.extract_text(x_tolerance = 2)
-        if page_text:
-            corpus += page_text + "\n"
-    doc.close() 
-    return corpus.strip()
+    file_extension = os.path.splitext(resume_path)[-1].lower()
+    if file_extension == ".pdf":
+        doc = pdfplumber.open(resume_path)
+        text = doc.pages
+        corpus =""
+        for i in text:
+            page_text = i.extract_text(x_tolerance = 2)
+            if page_text:
+                corpus += page_text + "\n"
+        doc.close() 
+        return corpus.strip()
+    elif file_extension == ".docx":
+        # New DOCX extraction logic (kept separate)
+        doc = docx.Document(resume_path)
+        text = [para.text for para in doc.paragraphs if para.text.strip()]
+        return "\n".join(text).strip()
+    
+    else:
+        raise ValueError("Unsupported file format. Please use a PDF or DOCX file.")
 
 def parse_resume(extracted_resume :str, extra_sections:list = None, regex_parse:bool = False, merge_repetition = False)->dict:
     """
